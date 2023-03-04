@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cypress": "cypress open",
-    "format": "prettier --write 'cypress/integration/*.js' 'cypress/page-objects/*.js'",
+    "format": "prettier --write 'cypress/e2e/integration/*.js' 'cypress/page-objects/*.js'",
     "test": "cypress run"
   },
   "keywords": [],

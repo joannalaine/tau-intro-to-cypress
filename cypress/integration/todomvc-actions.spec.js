@@ -1,24 +1,32 @@
 /// <reference types="cypress" />
 
+import { TodoPage } from "../page-objects/todo-page";
+
 describe("todo actions", () => {
+  const todoPage = new TodoPage();
+
   beforeEach(() => {
-    cy.visit("http://todomvc-app-for-testing.surge.sh");
-    cy.get(".new-todo").type("Clean kitchen{enter}");
+    todoPage.navigate();
+    todoPage.addTodo("Clean kitchen");
   });
 
   it("should add a new todo to the list", () => {
-    cy.get("label").should("have.text", "Clean kitchen");
-    cy.get(".toggle").should("not.be.checked");
+    todoPage.validateTodoText(0, "Clean kitchen");
+    todoPage.validateToggleState(0, false);
+    todoPage.validateTodoCompleted(0, false);
+    todoPage.validateNumberOfTodos(1);
   });
 
   it("should mark a todo as completed", () => {
-    cy.get(".toggle").click();
-    cy.get("label").should("have.css", "text-decoration-line", "line-through");
+    todoPage.toggleTodo(0);
+    todoPage.validateToggleState(0, true);
+    todoPage.validateTodoCompleted(0, true);
+    todoPage.validateNumberOfTodos(1);
   });
 
   it("should clear completed todos", () => {
-    cy.get(".toggle").click();
-    cy.contains("Clear").click();
-    cy.get(".todo-list").should("not.have.descendants", "li");
+    todoPage.toggleTodo(0);
+    todoPage.clearCompleted();
+    todoPage.validateNumberOfTodos(0);
   });
 });

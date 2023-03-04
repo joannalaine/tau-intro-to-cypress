@@ -1,30 +1,34 @@
 /// <reference types="cypress" />
 
+import { TodoPage } from "../page-objects/todo-page";
+
 describe("filtering", () => {
+  const todoPage = new TodoPage();
+
   beforeEach(() => {
-    cy.visit("http://todomvc-app-for-testing.surge.sh");
+    todoPage.navigate();
 
-    cy.get(".new-todo").type("Clean kitchen{enter}");
-    cy.get(".new-todo").type("Bake bread{enter}");
-    cy.get(".new-todo").type("Wash laundry{enter}");
+    todoPage.addTodo("Clean kitchen");
+    todoPage.addTodo("Bake bread");
+    todoPage.addTodo("Wash laundry");
 
-    cy.get(".todo-list li:nth-child(3) .toggle").click();
+    todoPage.toggleTodo(2);
   });
 
   it("should filter 'Active' todos", () => {
-    cy.contains("Active").click();
-    cy.get(".todo-list li").should("have.length", 2);
+    todoPage.filterByActive();
+    todoPage.validateNumberOfTodos(2);
   });
 
   it("should filter 'Completed' todos", () => {
-    cy.contains("Completed").click();
-    cy.get(".todo-list li").should("have.length", 1);
+    todoPage.filterByCompleted();
+    todoPage.validateNumberOfTodos(1);
   });
 
   it("should filter 'All' todos", () => {
-    cy.contains("Completed").click();
-    cy.contains("All").click();
-    
-    cy.get(".todo-list li").should("have.length", 3);
+    todoPage.filterByCompleted();
+    todoPage.filterByAll();
+
+    todoPage.validateNumberOfTodos(3);
   });
 });

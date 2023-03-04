@@ -1,34 +1,40 @@
 /// <reference types="cypress" />
 
-import { TodoPage } from '../page-objects/todo-page'
+import {
+  addTodo,
+  filterByActive,
+  filterByAll,
+  filterByCompleted,
+  navigate,
+  toggleTodo,
+  validateNumberOfTodos,
+} from '../page-objects/todo-page'
 
 describe('filtering', () => {
-  const todoPage = new TodoPage()
-
   beforeEach(() => {
-    todoPage.navigate()
+    navigate()
 
-    todoPage.addTodo('Clean kitchen')
-    todoPage.addTodo('Bake bread')
-    todoPage.addTodo('Wash laundry')
+    addTodo('Clean kitchen')
+    addTodo('Bake bread')
+    addTodo('Wash laundry')
 
-    todoPage.toggleTodo(2)
+    toggleTodo(2)
   })
 
   it("should filter 'Active' todos", () => {
-    todoPage.filterByActive()
-    todoPage.validateNumberOfTodos(2)
+    filterByActive()
+    validateNumberOfTodos(2)
   })
 
   it("should filter 'Completed' todos", () => {
-    todoPage.filterByCompleted()
-    todoPage.validateNumberOfTodos(1)
+    filterByCompleted()
+    validateNumberOfTodos(1)
   })
 
   it("should filter 'All' todos", () => {
-    todoPage.filterByCompleted()
-    todoPage.filterByAll()
+    filterByCompleted()
+    filterByAll()
 
-    todoPage.validateNumberOfTodos(3)
+    validateNumberOfTodos(3)
   })
 })
